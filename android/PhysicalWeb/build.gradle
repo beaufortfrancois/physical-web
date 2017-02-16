@@ -8,7 +8,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'gradle.plugin.si.dlabs.gradle:soter:1.0.8'
 
         // NOTE: Do not place your application dependencies here; they belong
