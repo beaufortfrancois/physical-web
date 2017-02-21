@@ -34,6 +34,7 @@ import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -45,7 +46,10 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -59,6 +63,8 @@ public class FatBeaconBroadcastService extends Service {
   private static final String SERVICE_UUID = "ae5946d4-e587-4ba8-b6a5-a97cca6affd3";
   private static final UUID CHARACTERISTIC_WEBPAGE_UUID = UUID.fromString(
       "d1a517f0-2499-46ca-9ccc-809bc1c966fa");
+  private static final UUID CHARACTERISTIC_CONTROL_UUID = UUID.fromString(
+      "d1a517f1-2499-46ca-9ccc-809bc1c966fa");
   private static final String PREVIOUS_BROADCAST_INFO_KEY = "previousInfo";
   private static final int BROADCASTING_NOTIFICATION_ID = 8;
   private boolean mStartedByRestart;
@@ -130,6 +136,65 @@ public class FatBeaconBroadcastService extends Service {
           0,
           null);
     }
+
+    @Override
+    public void onCharacteristicWriteRequest(BluetoothDevice device,
+                                            int requestId,
+                                            BluetoothGattCharacteristic characteristic,
+                                            boolean preparedWrite,
+                                            boolean responseNeeded,
+                                            int offset,
+                                            byte[] value) {
+      super.onCharacteristicWriteRequest(device, requestId, characteristic, preparedWrite,
+                                         responseNeeded, offset, value);
+      Log.i(TAG, "onCharacteristicWriteRequest " + characteristic.getUuid().toString());
+
+      if (CHARACTERISTIC_CONTROL_UUID.equals(characteristic.getUuid())) {
+        queueOffset = 0;
+        try {
+          String webpageString = new String(value, StandardCharsets.UTF_8);
+
+          Map webpages = new HashMap();
+          webpages.put("/fatbeacon_default_styles.css", R.raw.fatbeacon_default_styles);
+          webpages.put("/fatbeacon_default_webpage.html", R.raw.fatbeacon_default_webpage);
+          webpages.put("/fatbeacon_default_script.js", R.raw.fatbeacon_default_script);
+
+          Log.i(TAG, "webpageString  " + webpageString);
+          if (!webpages.containsKey(webpageString)) {
+            data = null;
+            Log.e(TAG, "File doesn't exists");
+            mGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_FAILURE,
+              /* No need to respond with an offset */ 0,
+              /* No need to respond with a value */ null);
+
+          }
+
+          String uriString = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+              getApplicationContext().getPackageName() + "/" + webpages.get(webpageString);
+          Log.i(TAG, "uriString  " + uriString);
+
+          data = Utils.getBytes(getContentResolver().openInputStream(Uri.parse(uriString)));
+
+          mGattServer.sendResponse(device,
+              requestId,
+              BluetoothGatt.GATT_SUCCESS,
+              0,
+              new byte[]{});
+
+        } catch (IOException e) {
+          data = null;
+          Log.e(TAG, "Error reading file");
+          mGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_FAILURE,
+              /* No need to respond with an offset */ 0,
+              /* No need to respond with a value */ null);
+        }
+      }
+
+      mGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_FAILURE,
+              /* No need to respond with an offset */ 0,
+              /* No need to respond with a value */ null);
+    }
+
 
     @Override
     public void onMtuChanged(BluetoothDevice device, int mtu) {
@@ -288,6 +353,10 @@ public class FatBeaconBroadcastService extends Service {
         CHARACTERISTIC_WEBPAGE_UUID, BluetoothGattCharacteristic.PROPERTY_READ,
         BluetoothGattCharacteristic.PERMISSION_READ);
     service.addCharacteristic(webpage);
+    BluetoothGattCharacteristic control = new BluetoothGattCharacteristic(
+        CHARACTERISTIC_CONTROL_UUID, BluetoothGattCharacteristic.PROPERTY_WRITE,
+        BluetoothGattCharacteristic.PERMISSION_WRITE);
+    service.addCharacteristic(control);
     mGattServer.addService(service);
   }
 }

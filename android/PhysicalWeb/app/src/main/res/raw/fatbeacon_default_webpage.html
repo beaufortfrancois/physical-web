@@ -3,45 +3,8 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="shortcut icon" type="image/x-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABC1BMVEX///8+gsM/gsM/gsM/gsQ/gsM/gsM/gsM+gcM/gsM/gsM/gsM/gsM+gsM/gsM/gsM/gsM/gsM9gMI/gsM/gsM/gsM+gcM/gsM/gsM/gsM/gsM/gsM/gsM+gcM/gsM9gcI5f8I/gsM/gsM/gsU8f8E8gMI/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM/gsM+gsM/gcM/gsM/gsM/gsM+gcM/gsM/gsM/gsM+gsM+gsM/gsM/gsM9gMM9gME/gsM9gMI8gcM+gcM/gsM+gMI+gMM/gsM9gcI/gcM+gcM9gMI/gsM+gsM8f8M8gME7gME9gcJAg8T///8dQjXcAAAAV3RSTlMBF4XX/f3VgxdL7bVTI0lB81kLZ6FbCeFpH9nNfx/fBwPJlwMDA6c96eu/XWVfvblrx7OjF/c1F6Ut9R11qzkfLZ3BCQc/BwsLkQ0NjwshIwWpBQUFBQXrCtlNAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+AIEREoJpDxKAkAAADMSURBVBjTY2AAAkYmZhZWNnYOBijg5OLm4eXl4ebig/D5BQSFhEVEhIVEBfhBfDFxCUkpaRkZaWZZCTl5oIAom4KikjIDg4qSoiqbKFBAjV1dQwysVFOdXQRIa2kLc0MM49bR1QNS+gaChhABRUEDIyDFZGxiagbim5maWzABaUsraxtbBjs7BlsbeysHkIyjk7OLq4CAq5u7kyNYq4enl7pAeLiAq7ePL9TtfkA+UMQf5heGADWQQGAQXIAhODA83DaEAQmEqgWGQVgAlbAZM4elADkAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTYtMDgtMTdUMTc6NDA6MzgtMDQ6MDDPiIKeAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE2LTA4LTE3VDE3OjQwOjM4LTA0OjAwvtU6IgAAAABJRU5ErkJggg==">
+    <link rel="stylesheet" type="text/css" href="fatbeacon_default_styles.css">
     <title>FatBeacon demo</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-        color: #444;
-        background: #f5f5f5;
-      }
-      .header {
-        display: flex;
-        background: #3F82C4;
-        height: 100px;
-      }
-      .card {
-        background: #fff;
-        padding: 20px;
-        margin: 30px 30px 0px 30px;
-        border: 1px solid #ccc;
-        box-shadow: 0px 0px 5px #aaa;
-      }
-      p {
-        font-size: 15px;
-      }
-      a {
-        color: #3F82C4;
-      }
-      h1 {
-        margin: 35px 0px 0px 10px;
-        display: inline-block;
-        font-size: 18px;
-        color: #fff;
-      }
-      svg {
-        margin-left: 30px;
-        display: inline-block;
-        width: 50px;
-      }
-    </style>
   </head>
   <body>
     <div class="header">
@@ -55,6 +18,7 @@
       <li>Runs a <a href="https://developer.bluetooth.org/TechnologyOverview/pages/gatt.aspx">GATT</a> service that offers up a simple web page.</li>
     </ul>
     <p>When you select a FatBeacon from the list of nearby beacons, the app connects to it and downloads to page to your phone before displaying it. This means you can interact with a FatBeacon with no data connectivity at all.</p>
+    <script src="fatbeacon_default_script.js"></script>
   </div>
   </body>
 </html>

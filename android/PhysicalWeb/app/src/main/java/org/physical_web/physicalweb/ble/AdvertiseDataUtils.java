@@ -228,7 +228,7 @@ public class AdvertiseDataUtils {
     public static AdvertiseSettings getAdvertiseSettings(boolean connectable) {
         AdvertiseSettings.Builder builder = new AdvertiseSettings.Builder();
         builder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER);
-        builder.setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM);
+        builder.setTxPowerLevel(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
         builder.setConnectable(connectable);
 
         return builder.build();
